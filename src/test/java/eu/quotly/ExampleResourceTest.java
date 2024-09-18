@@ -8,12 +8,14 @@ import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 class ExampleResourceTest {
+  private static final int STATUS_CODE = 200;
+
   @Test
   void testHelloEndpoint() {
     given()
       .when().get("/hello")
       .then()
-      .statusCode(200)
+      .statusCode(STATUS_CODE)
       .body(is("Hello from Quarkus REST"));
   }
 }
