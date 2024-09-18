@@ -24,14 +24,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Pull Docker Image
-        run: docker pull ghcr.io/super-linter/super-linter:v7.1.0
-
-      - name: Super-linter
-        uses: super-linter/super-linter@v7.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.LINTER_TOKEN }}
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -85,7 +77,7 @@ jobs:
           echo "::set-output name=name::$DOCKER_IMAGE_NAME"
 
       - name: Set Maven Version
-        run: mvn versions:set -DnewVersion=${{ env.NEW_VERSION }}
+        run: mvn versions:set -DnewVersion=${{ steps.tag.outputs.tag }}
 
       - name: Build backend
         run: |
@@ -102,7 +94,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          password: ${{ secrets.QUOTLY_TOKEN }}
 
       - name: Push Docker image
         run: |
@@ -117,7 +109,7 @@ jobs:
           REPO_OWNER=${{ github.repository_owner }}
           REPO_NAME=${{ github.event.repository.name }}
           REPO=ghcr.io/$REPO_OWNER/$REPO_NAME-staging
-          TOKEN=${{ secrets.DOCKER_TOKEN }}
+          TOKEN=${{ secrets.QUOTLY_TOKEN }}
           TAGS=$(curl -H "Authorization: Bearer $TOKEN" -s "https://ghcr.io/v2/$REPO/tags/list" | jq -r '.tags[]' | sort -r)
 
           echo -e "Found tags:\n$TAGS"
