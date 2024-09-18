@@ -18,17 +18,18 @@ jobs:
     permissions:
       contents: read
       packages: read
-      # To report GitHub Actions status checks
       statuses: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Pull Docker Image
+        run: docker pull ghcr.io/super-linter/super-linter:v7.1.0
+
       - name: Super-linter
         uses: super-linter/super-linter@v7.1.0
         env:
-          # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.LINTER_TOKEN }}
 
       - name: Set up JDK 17
