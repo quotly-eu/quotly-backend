@@ -69,17 +69,19 @@ jobs:
       - name: Generate docker image tag
         id: tag
         run: |
+          REPOSITORY_OWNER=${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]'
+          
           BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           BRANCH_NAME=${BRANCH_NAME##*/}
           if [ "$BRANCH_NAME" == "main" ]; then
           DATE_TAG=$(date +'%Y.%m')
           BUILD_NUMBER=$(echo $GITHUB_RUN_NUMBER)
           DOCKER_IMAGE_TAG="${DATE_TAG}.${BUILD_NUMBER}"
-          DOCKER_IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/quotly-release"
+          DOCKER_IMAGE_NAME="ghcr.io/${REPOSITORY_OWNER}/quotly-release"
           else
           BUILD_NUMBER=$(echo $GITHUB_RUN_NUMBER)
           DOCKER_IMAGE_TAG="${BRANCH_NAME}.${BUILD_NUMBER}"
-          DOCKER_IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/quotly-staging"
+          DOCKER_IMAGE_NAME="ghcr.io/${REPOSITORY_OWNER}/quotly-staging"
           fi
           echo "::set-output name=tag::$DOCKER_IMAGE_TAG"
           echo "::set-output name=name::$DOCKER_IMAGE_NAME"
@@ -112,7 +114,7 @@ jobs:
       - name: Clean up old staging images
         if: endsWith(steps.tag.outputs.name, 'staging')
         run: |
-          REPO_OWNER=${{ github.repository_owner }}
+          REPO_OWNER=${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]'
           REPO_NAME=${{ github.event.repository.name }}
           REPO=ghcr.io/$REPO_OWNER/$REPO_NAME-staging
           TOKEN=${{ secrets.QUOTLY_TOKEN }}
