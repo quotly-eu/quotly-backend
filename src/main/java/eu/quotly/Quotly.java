@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class Quotly {
   private static final Logger LOGGER = LoggerFactory.getLogger(Quotly.class);
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     LOGGER.info("Starting Quotly...");
     Quarkus.run(args);
   }
