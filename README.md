@@ -1,8 +1,29 @@
-# quotly-backend
+# Quotly Backend
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus as Java Framework.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+Quarkus documentation: <https://quarkus.io/>
+
+## Coding guidelines
+
+### Code style
+
+Use the "intellij-code-style.xml" as default code style in IntelliJ
+
+> Settings > Editor > Code Style > Java - Import Scheme
+
+### Usefully IntelliJ plugins
+
+| Plugin name      | Author         | Purpose                                    |
+|------------------|----------------|--------------------------------------------|
+| Rainbow Brackets | izhangzhihao   | Better code readability                    |
+| Indent Rainbow   | Indent Rainbow | Better code readability                    |
+| EnvFile          | Borys Pierov   | Run application with environment variables |
+
+## Using environment file locally
+
+Create a file named exactly like ```.env``` in the root directory of the repository.
+Then put there your custom environment variables like ```SERVER_PORT=8080``` and start the application.
 
 ## Running the application in dev mode
 
@@ -49,7 +70,7 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/quotly-backend-1.0-SNAPSHOT-runner`
+You can then execute your native executable with: `./target/quotly-backend-1.0-runner`
 
 If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
 
