@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.QUOTLY_TOKEN }}
           FILTER_REGEX_INCLUDE: src/.*\.java$
           VALIDATE_JAVA: true
-          JAVA_FILE_NAME: /.github/linters/java/checkstyle.xml
+          JAVA_FILE_NAME: checkstyle.xml
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
