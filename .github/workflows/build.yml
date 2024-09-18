@@ -84,12 +84,10 @@ jobs:
           echo "::set-output name=tag::$DOCKER_IMAGE_TAG"
           echo "::set-output name=name::$DOCKER_IMAGE_NAME"
 
-      - name: Set Maven Version
-        run: ./mvnw versions:set -DnewVersion=${{ steps.tag.outputs.tag }}
-
       - name: Build backend
         run: |
           chmod +x mvnw
+          ./mvnw versions:set -DnewVersion=${{ steps.tag.outputs.tag }}
           ./mvnw package -Dquarkus.package.type=uber-jar -DskipTests
 
       - name: Build Docker image
