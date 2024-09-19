@@ -4,6 +4,10 @@ This project uses Quarkus as Java Framework.
 
 Quarkus documentation: <https://quarkus.io/>
 
+## Commit guidelines
+
+> ```<ticket-id>: commit message``` Example: ```#1: Added mushrooms```
+
 ## Coding guidelines
 
 ### Code style
