@@ -127,3 +127,4 @@ jobs:
           package-name: 'quotly-staging'
           package-type: 'container'
           min-versions-to-keep: 5
+          token: $(${{ secrets.QUOTLY_TOKEN }} | base64)
