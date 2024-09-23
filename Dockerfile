@@ -3,7 +3,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Install curl
-RUN apk --no-cache add curl
+RUN apk --no-cache add curl=8.9.1-r2
 
 # Copy the backend JAR file
 COPY target/*.jar /app/backend.jar
