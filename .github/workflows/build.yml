@@ -15,10 +15,6 @@ jobs:
     env:
       RUNNER_TOOL_CACHE: /toolcache
 
-    permissions:
-      contents: read
-      statuses: read
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
