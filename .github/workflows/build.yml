@@ -47,6 +47,7 @@ jobs:
       - name: Run backend tests
         run: |
           chmod +x mvnw
+          ./mvnw clean
           ./mvnw test
 
   build_and_push_docker_image:
@@ -90,8 +91,9 @@ jobs:
           DOCKER_IMAGE_TAG="${BRANCH_NAME}.${BUILD_NUMBER}"
           DOCKER_IMAGE_NAME="ghcr.io/${REPOSITORY_OWNER}/quotly-staging"
           fi
-          echo "::set-output name=tag::$DOCKER_IMAGE_TAG"
-          echo "::set-output name=name::$DOCKER_IMAGE_NAME"
+          
+          echo "DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_NAME=$DOCKER_IMAGE_NAME" >> $GITHUB_ENV
 
       - name: Build backend
         run: |
@@ -113,8 +115,8 @@ jobs:
 
       - name: Push Docker image
         run: |
-          DOCKER_IMAGE_TAG=${{ steps.tag.outputs.tag }}
-          DOCKER_IMAGE_NAME=${{ steps.tag.outputs.name }}
+          DOCKER_IMAGE_TAG=${{ env.DOCKER_IMAGE_TAG }}
+          DOCKER_IMAGE_NAME=${{ env.DOCKER_IMAGE_NAME }}
           docker tag quotly:$DOCKER_IMAGE_TAG $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
           docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
 
