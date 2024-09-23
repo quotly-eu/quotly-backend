@@ -3,6 +3,8 @@ name: Cleanup Staging Images
 on:
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
   cleanup:
     runs-on: self-hosted

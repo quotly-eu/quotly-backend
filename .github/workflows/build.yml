@@ -26,8 +26,8 @@ jobs:
         env:
           DEFAULT_BRANCH: origin/main
           GITHUB_TOKEN: ${{ secrets.QUOTLY_TOKEN }}
-          FILTER_REGEX_EXCLUDE: .github/workflows/.*\.yml$
-          FILTER_REGEX_INCLUDE: .*[Dd]ockerfile$
+          FILTER_REGEX_EXCLUDE: .github/.*\.yml$
+          FILTER_REGEX_INCLUDE: Dockerfile$
           VALIDATE_DOCKERFILE: true
 
       - name: Lint Java
