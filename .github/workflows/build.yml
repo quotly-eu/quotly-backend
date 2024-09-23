@@ -9,13 +9,13 @@ on:
     branches:
       - main
 
+permissions: read-all
+
 jobs:
   run_integration_tests:
     runs-on: self-hosted
     env:
       RUNNER_TOOL_CACHE: /toolcache
-
-    permissions: read-all
 
     steps:
       - name: Checkout repository
