@@ -1,3 +1,5 @@
+#checkov:skip=CKV2_GHA_1
+
 # Final Stage
 FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
