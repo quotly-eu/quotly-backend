@@ -47,7 +47,6 @@ jobs:
       - name: Run backend tests
         run: |
           chmod +x mvnw
-          ./mvnw clean
           ./mvnw test
 
   build_and_push_docker_image:
@@ -98,12 +97,13 @@ jobs:
       - name: Build backend
         run: |
           chmod +x mvnw
-          ./mvnw versions:set -DnewVersion=${{ steps.tag.outputs.tag }}
+          ./mvnw clean
+          ./mvnw versions:set -DnewVersion=${{ env.DOCKER_IMAGE_TAG }}
           ./mvnw package -Dquarkus.package.jar.type=uber-jar -DskipTests
 
       - name: Build Docker image
         run: |
-          TAG=${{ steps.tag.outputs.tag }}
+          TAG=${{ env.DOCKER_IMAGE_TAG }}
           docker build -t quotly:$TAG .
 
       - name: Login to Github Packages
@@ -121,7 +121,7 @@ jobs:
           docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
 
       - name: Clean up old staging images
-        if: endsWith(steps.tag.outputs.name, 'staging')
+        if: endsWith(env.DOCKER_IMAGE_NAME, 'staging')
         run: |
           REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           REPO_NAME=${{ github.event.repository.name }}
