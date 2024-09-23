@@ -21,38 +21,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate docker image tag
-        id: tag
-        run: |
-          REPOSITORY_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
-
-          BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          BRANCH_NAME=${BRANCH_NAME/'/#'/-}
-          BRANCH_NAME=${BRANCH_NAME//[^a-zA-Z0-9-]/}
-
-          if [ "$BRANCH_NAME" == "main" ]; then
-          DATE_TAG=$(date +'%Y.%m')
-          BUILD_NUMBER=$(echo $GITHUB_RUN_NUMBER)
-          DOCKER_IMAGE_TAG="${DATE_TAG}.${BUILD_NUMBER}"
-          DOCKER_IMAGE_NAME="ghcr.io/${REPOSITORY_OWNER}/quotly-release"
-          else
-          BUILD_NUMBER=$(echo $GITHUB_RUN_NUMBER)
-          DOCKER_IMAGE_TAG="${BRANCH_NAME}.${BUILD_NUMBER}"
-          DOCKER_IMAGE_NAME="ghcr.io/${REPOSITORY_OWNER}/quotly-staging"
-          fi
-
-          echo "DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_NAME=$DOCKER_IMAGE_NAME" >> $GITHUB_ENV
-
-      - name: Clean up old staging images
-        if: endsWith(env.DOCKER_IMAGE_NAME, 'staging')
-        uses: actions/delete-package-versions@v5
-        with:
-          package-name: 'quotly-staging'
-          package-type: 'container'
-          min-versions-to-keep: 5
-          token: $(${{ secrets.QUOTLY_TOKEN }} | base64)
-
       - name: Lint Dockerfile
         uses: super-linter/super-linter@v7.1.0
         env:
@@ -151,3 +119,47 @@ jobs:
           DOCKER_IMAGE_NAME=${{ env.DOCKER_IMAGE_NAME }}
           docker tag quotly:$DOCKER_IMAGE_TAG $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
           docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+          
+
+      - name: Clean up old staging images
+        if: endsWith(env.DOCKER_IMAGE_NAME, 'staging')
+        run: |
+          REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
+          REPO_NAME=quotly-staging
+          TOKEN=${{ secrets.QUOTLY_TOKEN }}
+          
+          # Get all package versions (tags) from the GitHub Container Registry
+          TAGS=$(curl -H "Authorization: Bearer $TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/orgs/$REPO_OWNER/packages/container/$REPO_NAME/versions \
+            | grep -oP '"name": "\K[^"]+')
+          
+          echo -e "Found tags:\n$TAGS"
+
+          KEEP=5
+          COUNT=0
+          
+          # Sort the tags based on the full version number (after the last dot)
+          for TAG in $(echo "$TAGS" | sort -t'.' -k2,2n -k1,1); do        
+            if [[ $COUNT -ge $KEEP ]]; then
+              echo "Deleting $TAG"
+
+              # Get the version ID of the tag
+              VERSION_ID=$(curl -H "Authorization: Bearer $TOKEN" \
+                -H "Accept: application/vnd.github.v3+json" \
+                https://api.github.com/orgs/$REPO_OWNER/packages/container/$REPO_NAME/versions \
+                | grep -B 1 "\"name\": \"$TAG\"" | grep -oP '"id": \K\d+')
+
+              if [ -n "$VERSION_ID" ]; then
+                # Delete the version using its ID
+                curl -X DELETE \
+                  -H "Authorization: Bearer $TOKEN" \
+                  -H "Accept: application/vnd.github.v3+json" \
+                  https://api.github.com/orgs/$REPO_OWNER/packages/container/$REPO_NAME/versions/$VERSION_ID
+                echo "Deleted $TAG (ID: $VERSION_ID)"
+              else
+                echo "Failed to get version ID for $TAG"
+              fi
+            fi
+            COUNT=$((COUNT + 1))
+          done
