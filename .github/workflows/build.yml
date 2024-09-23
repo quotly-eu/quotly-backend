@@ -72,7 +72,10 @@ jobs:
           REPOSITORY_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           
           BRANCH_NAME=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          BRANCH_NAME=${BRANCH_NAME##*/ | sed 's/#//g'}
+          BRANCH_NAME=${BRANCH_NAME##*/}
+          BRANCH_NAME=${BRANCH_NAME/'/#'/-}
+          BRANCH_NAME=${BRANCH_NAME//[^a-zA-Z0-9-]/}
+          
           if [ "$BRANCH_NAME" == "main" ]; then
           DATE_TAG=$(date +'%Y.%m')
           BUILD_NUMBER=$(echo $GITHUB_RUN_NUMBER)
