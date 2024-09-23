@@ -122,28 +122,8 @@ jobs:
 
       - name: Clean up old staging images
         if: endsWith(env.DOCKER_IMAGE_NAME, 'staging')
-        run: |
-          sudo apt-get install -y jq
-          
-          REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
-          REPO=$REPO_OWNER/quotly-staging
-          TOKEN=$(echo '${{ secrets.QUOTLY_TOKEN }}' | base64)
-          TAGS=$(curl -H "Authorization: Bearer $TOKEN" -s "https://ghcr.io/v2/$REPO/tags/list" | jq -r '.tags[]' | sort -r)
-
-          echo -e "Found tags:\n$TAGS"
-
-          KEEP=5
-          COUNT=0
-          
-          for TAG in $TAGS; do        
-            if [[ $COUNT -ge $KEEP ]]; then
-              echo "Deleting $TAG"
-              DIGEST=$(curl -H "Authorization: Bearer $TOKEN" -sI "https://ghcr.io/v2/$REPO/manifests/$TAG" | grep docker-content-digest | awk '{print $2}' | tr -d $'\r')
-              if [ -n "$DIGEST" ]; then
-                curl -H "Authorization: Bearer $TOKEN" -X DELETE "https://ghcr.io/v2/$REPO/manifests/$DIGEST"
-              else
-                echo "Failed to get digest for $TAG"
-              fi
-            fi
-            COUNT=$((COUNT + 1))
-          done
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: 'quotly-staging'
+          package-type: 'container'
+          min-versions-to-keep: 5
