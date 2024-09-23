@@ -126,9 +126,8 @@ jobs:
           sudo apt-get install -y jq
           
           REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
-          REPO_NAME=${{ github.event.repository.name }}
-          REPO=ghcr.io/$REPO_OWNER/$REPO_NAME-staging
-          TOKEN=${{ secrets.QUOTLY_TOKEN }}
+          REPO=ghcr.io/$REPO_OWNER/quotly-staging
+          TOKEN=${{ secrets.GITHUB_TOKEN }}
           TAGS=$(curl -H "Authorization: Bearer $TOKEN" -s "https://ghcr.io/v2/$REPO/tags/list" | jq -r '.tags[]' | sort -r)
 
           echo -e "Found tags:\n$TAGS"
