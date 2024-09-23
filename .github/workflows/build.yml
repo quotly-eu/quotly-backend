@@ -127,7 +127,7 @@ jobs:
           
           REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           REPO=ghcr.io/$REPO_OWNER/quotly-staging
-          TOKEN=${{ secrets.GITHUB_TOKEN }}
+          TOKEN=$(echo '${{ secrets.GITHUB_TOKEN }}' | base64)
           TAGS=$(curl -H "Authorization: Bearer $TOKEN" -s "https://ghcr.io/v2/$REPO/tags/list" | jq -r '.tags[]' | sort -r)
 
           echo -e "Found tags:\n$TAGS"
