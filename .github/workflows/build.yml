@@ -123,6 +123,8 @@ jobs:
       - name: Clean up old staging images
         if: endsWith(env.DOCKER_IMAGE_NAME, 'staging')
         run: |
+          sudo apt-get install -y jq
+          
           REPO_OWNER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           REPO_NAME=${{ github.event.repository.name }}
           REPO=ghcr.io/$REPO_OWNER/$REPO_NAME-staging
