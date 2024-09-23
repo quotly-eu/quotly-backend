@@ -24,10 +24,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Super-linter
+      - name: Lint Dockerfile
         uses: super-linter/super-linter@v7.1.0
         env:
-          DEFAULT_BRANCH: main
+          DEFAULT_BRANCH: origin/main
+          GITHUB_TOKEN: ${{ secrets.QUOTLY_TOKEN }}
+          VALIDATE_DOCKERFILE: true
+
+      - name: Lint Java
+        uses: super-linter/super-linter@v7.1.0
+        env:
+          DEFAULT_BRANCH: origin/main
           GITHUB_TOKEN: ${{ secrets.QUOTLY_TOKEN }}
           FILTER_REGEX_INCLUDE: src/.*\.java$
           VALIDATE_JAVA: true
@@ -92,7 +99,7 @@ jobs:
         run: |
           chmod +x mvnw
           ./mvnw versions:set -DnewVersion=${{ steps.tag.outputs.tag }}
-          ./mvnw package -Dquarkus.package.type=uber-jar -DskipTests
+          ./mvnw package -Dquarkus.package.jar.type=uber-jar -DskipTests
 
       - name: Build Docker image
         run: |
