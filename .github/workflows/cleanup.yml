@@ -1,4 +1,4 @@
-name: Cleanup Staging Images
+name: Quotly Cleanup Staging Images
 
 on:
   workflow_dispatch:
@@ -12,6 +12,9 @@ jobs:
       RUNNER_TOOL_CACHE: /toolcache
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Clean up old staging images
         run: |
           chmod +x cleanup_docker_images.sh

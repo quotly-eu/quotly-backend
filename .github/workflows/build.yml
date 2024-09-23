@@ -121,12 +121,6 @@ jobs:
           docker tag quotly:$DOCKER_IMAGE_TAG $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
           docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
 
-      - name: Install dependency for cleanup
-        if: endsWith(env.DOCKER_IMAGE_NAME, 'staging')
-        run: |
-          apt-get update
-          apt-get install -y jq
-
       - name: Clean up old staging images
         if: endsWith(env.DOCKER_IMAGE_NAME, 'staging')
         run: |
