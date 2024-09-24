@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Set dependency
-sudo apt-get update && sudo apt-get install -y jq
-
 # Set environment variables
 REPO_OWNER=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 REPO_NAME="$2"
