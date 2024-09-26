@@ -4,6 +4,12 @@ This project uses Quarkus as Java Framework.
 
 Quarkus documentation: <https://quarkus.io/>
 
+## Branch naming guidelines
+
+> **Feature Branch:** ```feature/<ticket-id>``` Example: ```feature/#123```
+> 
+> **Bugfix Branch:** ```bugfix/<ticket-id>``` Example: ```bugfix/#123```
+
 ## Commit guidelines
 
 > ```<ticket-id>: commit message``` Example: ```#1: Added mushrooms```
