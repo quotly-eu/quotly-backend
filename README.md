@@ -35,6 +35,14 @@ Use the "intellij-code-style.xml" as default code style in IntelliJ
 Create a file named exactly like ```.env``` in the root directory of the repository.
 Then put there your custom environment variables like ```SERVER_PORT=8080``` and start the application.
 
+The default ```.env``` file looks like this:
+
+```properties
+DATABASE_URL=jdbc:mariadb://<host>:<port>/<database-name>
+DATABASE_USERNAME=<username>
+DATABASE_PASSWORD=<password>
+```
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
