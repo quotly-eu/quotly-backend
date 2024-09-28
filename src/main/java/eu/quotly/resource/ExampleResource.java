@@ -10,6 +10,6 @@ public class ExampleResource {
   @GET
   @Produces(MediaType.TEXT_PLAIN)
   public String hello() {
-    return "Just a dummy rest endpoint";
+    return "Hello from Quarkus REST";
   }
 }
