@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.quotly</groupId>
     <artifactId>backend</artifactId>
-    <version>2024.09.1</version>
+    <version>null</version> <!-- Version is automatically replaced by GitHub Actions -->
 
     <properties>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
@@ -64,6 +64,21 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+        </dependency>
+
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-swagger-ui</artifactId>
         </dependency>
     </dependencies>
 

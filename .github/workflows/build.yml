@@ -17,18 +17,32 @@ jobs:
     env:
       RUNNER_TOOL_CACHE: /toolcache
 
+    services:
+      database:
+        image: mariadb:10.6.19-ubi
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+          MYSQL_DATABASE: ${{ vars.TEST_DATABASE_NAME }}
+          MYSQL_USER: ${{ vars.TEST_DATABASE_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Lint Dockerfile
         uses: super-linter/super-linter@v7.1.0
         env:
           DEFAULT_BRANCH: origin/main
           GITHUB_TOKEN: ${{ secrets.QUOTLY_TOKEN }}
-          FILTER_REGEX_EXCLUDE: .github/.*\.yml$
-          FILTER_REGEX_INCLUDE: Dockerfile$
+          FILTER_REGEX_INCLUDE: ^Dockerfile$
+          FILTER_REGEX_EXCLUDE: .*
           VALIDATE_DOCKERFILE: true
+          VALIDATE_JSCPD: false
 
       - name: Lint Java
         uses: super-linter/super-linter@v7.1.0
@@ -46,6 +60,10 @@ jobs:
           cache: 'maven'
 
       - name: Run backend tests
+        env:
+          DATABASE_URL: jdbc:mariadb://localhost:3306/${{ vars.TEST_DATABASE_NAME }}
+          DATABASE_USERNAME: ${{ vars.TEST_DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
         run: |
           chmod +x mvnw
           ./mvnw test
