@@ -28,10 +28,9 @@ jobs:
         env:
           DEFAULT_BRANCH: origin/main
           GITHUB_TOKEN: ${{ secrets.QUOTLY_TOKEN }}
-          FILTER_REGEX_EXCLUDE: .github/.*\.yml$
-          FILTER_REGEX_INCLUDE: Dockerfile$
+          FILTER_REGEX_INCLUDE: ^Dockerfile$
+          FILTER_REGEX_EXCLUDE: .*
           VALIDATE_DOCKERFILE: true
-          VALIDATE_JAVA: false
 
       - name: Lint Java
         uses: super-linter/super-linter@v7.1.0
