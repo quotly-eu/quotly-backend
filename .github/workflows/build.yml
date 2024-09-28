@@ -17,6 +17,17 @@ jobs:
     env:
       RUNNER_TOOL_CACHE: /toolcache
 
+    services:
+      database:
+        image: mariadb:10.6.19-ubi
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+          MYSQL_DATABASE: ${{ vars.TEST_DATABASE_NAME }}
+          MYSQL_USER: ${{ vars.TEST_DATABASE_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -49,6 +60,10 @@ jobs:
           cache: 'maven'
 
       - name: Run backend tests
+        env:
+          DATABASE_URL: localhost:3306/${{ vars.TEST_DATABASE_NAME }}
+          DATABASE_USERNAME: ${{ vars.TEST_DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
         run: |
           chmod +x mvnw
           ./mvnw test
