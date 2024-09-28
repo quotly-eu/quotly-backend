@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.quotly</groupId>
     <artifactId>backend</artifactId>
-    <version>null</version>
+    <version>null</version> <!-- Version is automatically replaced by GitHub Actions -->
 
     <properties>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
