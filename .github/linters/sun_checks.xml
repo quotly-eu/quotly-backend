@@ -4,7 +4,6 @@
     "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <!--
-
     Checkstyle configuration that checks the sun coding conventions from:
 
     - the Java Language Specification at
@@ -28,7 +27,6 @@
     To suppress certain violations please review suppression filters.
 
     Finally, it is worth reading the documentation.
-
 -->
 
 <module name="Checker">
@@ -90,7 +88,6 @@
     </module>
 
     <module name="TreeWalker">
-
         <!-- Checks for Javadoc comments.                     -->
         <!-- See https://checkstyle.org/checks/javadoc/index.html -->
         <module name="InvalidJavadocPosition"/>
@@ -189,5 +186,4 @@
             <property name="optional" value="true"/>
         </module>
     </module>
-
 </module>
