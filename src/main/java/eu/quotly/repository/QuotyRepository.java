@@ -15,7 +15,7 @@ public class QuotyRepository implements PanacheRepository<QuoteEntity> {
   @Inject
   UserRepository userRepository;
 
-  public List<QuoteEntity> findByDiscordId(String discordId) {
+  public List<QuoteEntity> findByDiscordId(final String discordId) {
     UserEntity user = userRepository.findByDiscordId(discordId);
     return find("user", user).stream().toList();
   }

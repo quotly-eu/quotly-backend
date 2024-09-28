@@ -16,8 +16,8 @@ public class LoggingFilter implements ContainerResponseFilter, ExceptionMapper<W
 
   @Override
   public void filter(
-    ContainerRequestContext containerRequestContext,
-    ContainerResponseContext containerResponseContext
+    final ContainerRequestContext containerRequestContext,
+    final ContainerResponseContext containerResponseContext
   ) {
     int status = containerResponseContext.getStatus();
     String method = containerRequestContext.getMethod();
@@ -26,11 +26,11 @@ public class LoggingFilter implements ContainerResponseFilter, ExceptionMapper<W
   }
 
   @Override
-  public Response toResponse(WebApplicationException exception) {
-    String exceptionMessage = exception.getMessage();
+  public Response toResponse(final WebApplicationException webApplicationException) {
+    String exceptionMessage = webApplicationException.getMessage();
     String[] messageParts = exceptionMessage.split(":", 2);
 
     LOGGER.info("WebApplicationException {type=\"{}\", message=\"{}\"}", messageParts[0], messageParts[1].trim());
-    return exception.getResponse();
+    return webApplicationException.getResponse();
   }
 }

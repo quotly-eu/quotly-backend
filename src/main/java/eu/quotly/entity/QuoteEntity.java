@@ -1,5 +1,6 @@
 package eu.quotly.entity;
 
+import eu.quotly.Constants;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +33,7 @@ public class QuoteEntity extends PanacheEntityBase {
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @Column(name = "quote")
+  @Column(name = "quote", length = Constants.DB_EXTRA_LARGE_STRING_LENGTH)
   private String quote;
 
   @Column(name = "created_at")
