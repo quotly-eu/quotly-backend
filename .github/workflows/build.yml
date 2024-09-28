@@ -61,7 +61,7 @@ jobs:
 
       - name: Run backend tests
         env:
-          DATABASE_URL: localhost:3306/${{ vars.TEST_DATABASE_NAME }}
+          DATABASE_URL: jdbc:mariadb://localhost:3306/${{ vars.TEST_DATABASE_NAME }}
           DATABASE_USERNAME: ${{ vars.TEST_DATABASE_USERNAME }}
           DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
         run: |
