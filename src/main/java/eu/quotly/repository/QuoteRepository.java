@@ -10,7 +10,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 @ApplicationScoped
-public class QuotyRepository implements PanacheRepository<QuoteEntity> {
+public class QuoteRepository implements PanacheRepository<QuoteEntity> {
 
   @Inject
   UserRepository userRepository;
