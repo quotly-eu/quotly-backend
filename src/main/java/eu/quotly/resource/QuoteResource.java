@@ -1,7 +1,6 @@
 package eu.quotly.resource;
 
 import eu.quotly.service.QuoteService;
-import eu.quotly.service.ResponseService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
