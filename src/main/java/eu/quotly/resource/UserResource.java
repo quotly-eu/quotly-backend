@@ -1,5 +1,7 @@
 package eu.quotly.resource;
 
+import eu.quotly.service.UserService;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -10,32 +12,35 @@ import jakarta.ws.rs.core.Response;
 @Path("/v1/users")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
+  @Inject
+  UserService userService;
+
   @GET
   public Response getUsers() {
-    return Response.ok().build();
+    return userService.getAllUsers();
   }
 
   @GET
-  @Path("/{userId}")
-  public Response getUser(@PathParam("userId") String userId) {
-    return Response.ok().build();
+  @Path("/{discordId}")
+  public Response getUser(@PathParam("discordId") String discordId) {
+    return userService.getUserByDiscordId(discordId);
   }
 
   @GET
-  @Path("/{userId}/reactions")
-  public Response getUserReactions(@PathParam("userId") String userId) {
-    return Response.ok().build();
+  @Path("/{discordId}/reactions")
+  public Response getUserReactions(@PathParam("discordId") String discordId) {
+    return userService.getAllUserReactions(discordId);
   }
 
   @GET
-  @Path("/{userId}/roles")
-  public Response getUserRoles(@PathParam("userId") String userId) {
-    return Response.ok().build();
+  @Path("/{discordId}/roles")
+  public Response getUserRoles(@PathParam("discordId") String discordId) {
+    return userService.getAllUserRoles(discordId);
   }
 
   @GET
-  @Path("/{userId}/saved-quotes")
-  public Response getUserSavedQuotes(@PathParam("userId") String userId) {
-    return Response.ok().build();
+  @Path("/{discordId}/saved-quotes")
+  public Response getUserSavedQuotes(@PathParam("discordId") String discordId) {
+    return userService.getAllUserSavedQuotes(discordId);
   }
 }
