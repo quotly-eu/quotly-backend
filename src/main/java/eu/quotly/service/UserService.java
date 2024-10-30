@@ -1,7 +1,7 @@
 package eu.quotly.service;
 
-import jakarta.ws.rs.Path;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@Path("/v1/users")
+@ApplicationScoped
 public class UserService {
 }
