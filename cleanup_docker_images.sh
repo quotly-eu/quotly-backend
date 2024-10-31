@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Set environment variables
+# Set needed variables
 REPO_OWNER=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 REPO_NAME="$2"
 TOKEN="$3"

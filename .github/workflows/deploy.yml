@@ -1,0 +1,60 @@
+name: Quotly Deploy Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_registry:
+        description: 'Select the package registry to deploy from (staging or release)'
+        required: true
+        default: 'quotly-release'
+        type: choice
+        options:
+          - quotly-release
+          - quotly-staging
+      image_tag:
+        description: 'Enter the image tag to deploy (e.g., staging: <branch-name>.<build-num> or release: YYYY.MM.<build-num>)'
+        required: true
+        type: string
+
+permissions: read-all
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    environment: default
+
+    steps:
+      - name: Set variables
+        id: vars
+        run: |
+          echo "IMAGE_NAME=ghcr.io/quotly-eu/${{ github.event.inputs.package_registry }}:${{ github.event.inputs.image_tag }}" >> $GITHUB_ENV
+
+      - name: Login to Github Packages
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.QUOTLY_TOKEN }}
+
+      - name: Deploy Docker image
+        run: |
+          docker pull ${{ env.IMAGE_NAME }}
+          docker stop quotly_backend || true
+          docker rm quotly_backend || true
+          
+          # Extract secrets and variables from the github environment
+          ENV_VARS=""
+          for secret in $(printenv | grep '^ENV_' | cut -d'=' -f1); do
+            ENV_VARS="$ENV_VARS --env ${secret}=${!secret}"
+          done
+          
+          docker run -d \
+              --name quotly_container \
+              --restart unless-stopped \
+              -p 8081:80 \
+              $ENV_VARS \
+              ${{ env.IMAGE_NAME }}
+            docker image prune -f
+        env:
+          # Load all secrets and variables from the selected environment
+          $(for var in ${!GITHUB_ENV_*}; do echo "$var=${{ secrets[$var] || vars[$var] }}"; done)
