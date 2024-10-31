@@ -54,9 +54,9 @@ jobs:
           done
           
           docker run -d \
-              --name quotly_container \
+              --name quotly_backend \
               --restart unless-stopped \
-              -p 8081:${{ env.SERVER_PORT }} \
+              -p 8010:${{ env.SERVER_PORT }} \
               $ENV_VARS \
               ${{ env.IMAGE_NAME }}
           docker image prune -f
