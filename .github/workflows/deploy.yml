@@ -37,26 +37,17 @@ jobs:
           password: ${{ secrets.QUOTLY_TOKEN }}
 
       - name: Deploy Docker image
-        env:
-          SERVER_PORT: ${{ vars.SERVER_PORT }}
-          DATABASE_URL: ${{ vars.DATABASE_URL }}
-          DATABASE_USERNAME: ${{ vars.DATABASE_USERNAME }}
-          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: |
           docker pull ${{ env.IMAGE_NAME }}
           docker stop quotly_backend || true
           docker rm quotly_backend || true
-          
-          # Extract secrets and variables from the github environment
-          ENV_VARS=""
-          for secret in $(printenv | grep '^ENV_' | cut -d'=' -f1); do
-            ENV_VARS="$ENV_VARS --env ${secret}=${!secret}"
-          done
-          
           docker run -d \
               --name quotly_backend \
               --restart unless-stopped \
-              -p 8010:${{ env.SERVER_PORT }} \
-              $ENV_VARS \
+              -p 8010:${{ vars.SERVER_PORT }} \
+              -e SERVER_PORT=${{ vars.SERVER_PORT }} \
+              -e DATABASE_URL=${{ vars.DATABASE_URL }} \
+              -e DATABASE_USERNAME=${{ vars.DATABASE_USERNAME }} \
+              -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
               ${{ env.IMAGE_NAME }}
           docker image prune -f
