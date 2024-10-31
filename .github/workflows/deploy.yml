@@ -59,4 +59,4 @@ jobs:
               -p 8081:${{ env.SERVER_PORT }} \
               $ENV_VARS \
               ${{ env.IMAGE_NAME }}
-            docker image prune -f
+          docker image prune -f
