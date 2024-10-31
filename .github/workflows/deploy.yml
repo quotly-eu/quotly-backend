@@ -45,6 +45,7 @@ jobs:
               --name quotly_backend \
               --restart unless-stopped \
               -p 8010:${{ vars.SERVER_PORT }} \
+              -e SERVER_HOST=${{ vars.SERVER_HOST }} \
               -e SERVER_PORT=${{ vars.SERVER_PORT }} \
               -e DATABASE_URL=${{ vars.DATABASE_URL }} \
               -e DATABASE_USERNAME=${{ vars.DATABASE_USERNAME }} \
