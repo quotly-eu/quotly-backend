@@ -1,8 +1,11 @@
 package eu.quotly.config;
 
-import org.eclipse.microprofile.config.inject.ConfigProperties;
+import io.quarkus.runtime.annotations.StaticInitSafe;
+import io.smallrye.config.ConfigMapping;
 
-@ConfigProperties(prefix = "quotly")
-public class QuotlyProperties {
-  public String basePath;
+@StaticInitSafe
+@ConfigMapping(prefix = "quotly")
+public interface QuotlyProperties {
+  String version();
+  Boolean emailEncryption();
 }

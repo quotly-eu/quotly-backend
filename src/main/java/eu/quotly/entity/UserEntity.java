@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -36,7 +35,7 @@ public class UserEntity extends PanacheEntityBase {
   private String discordId;
 
   @Column(name = "email_address", length = Constants.DB_LARGE_STRING_LENGTH)
-  private String emailAddress;
+  private String emailAddress; // TODO: Email Address encryption
 
   @Column(name = "display_name", length = Constants.DB_EXTRA_SMALL_STRING_LENGTH)
   private String displayName;
