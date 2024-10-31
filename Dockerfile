@@ -20,4 +20,4 @@ RUN adduser -D srv_user
 USER srv_user
 
 # Start application
-CMD ["java", "-jar", "/app/backend.jar"]
+CMD ["java", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "/app/backend.jar"]
