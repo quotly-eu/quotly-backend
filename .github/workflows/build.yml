@@ -27,8 +27,6 @@ jobs:
           MYSQL_DATABASE: ${{ vars.TEST_DATABASE_NAME }}
           MYSQL_USER: ${{ vars.TEST_DATABASE_USERNAME }}
           MYSQL_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
-        options: >
-          --expire-logs-days=0
 
     steps:
       - name: Checkout repository
