@@ -66,7 +66,7 @@ jobs:
           DATABASE_PASSWORD: ${{ secrets.TEST_DATABASE_PASSWORD }}
         run: |
           chmod +x mvnw
-          ./mvnw test
+          ./mvnw test -Dquarkus.profile=test
 
   build_and_push_docker_image:
     runs-on: self-hosted
