@@ -1,7 +1,9 @@
 package eu.quotly.service;
 
+import eu.quotly.QuotlyTestProfile;
 import eu.quotly.entity.UserEntity;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
+@TestProfile(QuotlyTestProfile.class)
 class EmailEncryptionServiceTest {
   private static final String DISCORD_ID = "1234567890";
   private static final String DECRYPTED_EMAIL_ADDRESS = "dummy@quotly.eu";
