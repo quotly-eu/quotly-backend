@@ -3,7 +3,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Install curl
-RUN apk --no-cache add curl=8.9.1-r2
+RUN apk --no-cache add curl=8.10.1-r0
 
 # Copy the backend JAR file
 COPY target/*.jar /app/backend.jar
@@ -20,4 +20,4 @@ RUN adduser -D srv_user
 USER srv_user
 
 # Start application
-CMD ["java", "-jar", "/app/backend.jar"]
+CMD ["java", "-Djava.util.logging.manager=org.jboss.logmanager.LogManager", "-jar", "/app/backend.jar"]
