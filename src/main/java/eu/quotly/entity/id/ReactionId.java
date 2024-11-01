@@ -18,8 +18,14 @@ public class ReactionId implements Serializable {
 
   @Override
   public boolean equals(Object object) {
-    if (this == object) return true;
-    if (object == null || getClass() != object.getClass()) return false;
+    if (this == object) {
+      return true;
+    }
+
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+
     ReactionId that = (ReactionId) object;
     return Objects.equals(userId, that.userId) && Objects.equals(quoteId, that.quoteId);
   }
