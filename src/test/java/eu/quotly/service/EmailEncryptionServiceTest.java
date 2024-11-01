@@ -19,28 +19,32 @@ class EmailEncryptionServiceTest {
 
   @Test
   void shouldGetEncryptedEmailAddress() throws Exception {
-    String encryptedEmailAddress = emailEncryptionService.getEncryptedEmailAddress(getDummyUser(DECRYPTED_EMAIL_ADDRESS));
+    String encryptedEmailAddress = emailEncryptionService
+      .getEncryptedEmailAddress(getDummyUser(DECRYPTED_EMAIL_ADDRESS));
     assertNotNull(encryptedEmailAddress, "Encrypted email address should not be null");
     assertEquals(ENCRYPTED_EMAIL_ADDRESS, encryptedEmailAddress, "Encrypted email address should match");
   }
 
   @Test
   void shouldGetEncryptedEmailAddressAlreadyEncrypted() throws Exception {
-    String encryptedEmailAddress = emailEncryptionService.getEncryptedEmailAddress(getDummyUser(ENCRYPTED_EMAIL_ADDRESS));
+    String encryptedEmailAddress = emailEncryptionService
+      .getEncryptedEmailAddress(getDummyUser(ENCRYPTED_EMAIL_ADDRESS));
     assertNotNull(encryptedEmailAddress, "Encrypted email address should not be null");
     assertEquals(ENCRYPTED_EMAIL_ADDRESS, encryptedEmailAddress, "Encrypted email address should match");
   }
 
   @Test
   void shouldGetDecryptedEmailAddress() throws Exception {
-    String decryptedEmailAddress = emailEncryptionService.getDecryptedEmailAddress(getDummyUser(ENCRYPTED_EMAIL_ADDRESS));
+    String decryptedEmailAddress = emailEncryptionService
+      .getDecryptedEmailAddress(getDummyUser(ENCRYPTED_EMAIL_ADDRESS));
     assertNotNull(decryptedEmailAddress, "Decrypted email address should not be null");
     assertEquals(DECRYPTED_EMAIL_ADDRESS, decryptedEmailAddress, "Decrypted email address should match");
   }
 
   @Test
   void shouldGetDecryptedEmailAddressAlreadyDecrypted() throws Exception {
-    String decryptedEmailAddress = emailEncryptionService.getDecryptedEmailAddress(getDummyUser(DECRYPTED_EMAIL_ADDRESS));
+    String decryptedEmailAddress = emailEncryptionService
+      .getDecryptedEmailAddress(getDummyUser(DECRYPTED_EMAIL_ADDRESS));
     assertNotNull(decryptedEmailAddress, "Decrypted email address should not be null");
     assertEquals(DECRYPTED_EMAIL_ADDRESS, decryptedEmailAddress, "Decrypted email address should match");
   }
