@@ -21,7 +21,13 @@ public class UserService {
   @Inject UserRepository userRepository;
   @Inject ResponseService responseService;
 
-  public Response getAllUsers(String startTime, String endTime, String searchQuery, Integer pageIndex, Integer pageSize) {
+  public Response getAllUsers(
+    String startTime,
+    String endTime,
+    String searchQuery,
+    Integer pageIndex,
+    Integer pageSize
+  ) {
     if (pageIndex < 0 || pageSize < 1) {
       return responseService.createErrorResponse(Response.Status.BAD_REQUEST, ErrorCode.INVALID_PAGE_INDEX_OR_SIZE);
     }
