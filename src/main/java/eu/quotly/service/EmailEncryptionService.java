@@ -1,6 +1,5 @@
 package eu.quotly.service;
 
-import eu.quotly.config.QuotlyConfig;
 import eu.quotly.entity.UserEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -17,6 +16,7 @@ import java.util.Base64;
 public class EmailEncryptionService {
   private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
   private static final int KEY_SIZE = 256;
+  private static final int BITS_PER_BYTE = 8;
 
   public String getEncryptedEmailAddress(UserEntity user) throws Exception {
     if (isEmailEncrypted(user)) {
@@ -60,7 +60,7 @@ public class EmailEncryptionService {
   private SecretKey getSecretKeyFromDiscordId(String discordId) throws NoSuchAlgorithmException {
     MessageDigest sha = MessageDigest.getInstance("SHA-256");
     byte[] key = sha.digest(discordId.getBytes(StandardCharsets.UTF_8));
-    return new SecretKeySpec(key, 0, KEY_SIZE / 8, "AES");
+    return new SecretKeySpec(key, 0, KEY_SIZE / BITS_PER_BYTE, "AES");
   }
 
   private IvParameterSpec getFixedInitializationVectorFromDiscordId(String discordId) throws NoSuchAlgorithmException {

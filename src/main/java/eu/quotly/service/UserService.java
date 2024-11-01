@@ -29,7 +29,7 @@ public class UserService {
     LocalDateTime startDateTime;
     try {
       if (startTime == null || startTime.isBlank()) {
-        startDateTime = LocalDateTime.of(1970, 1, 1, 0, 0, 0);
+        startDateTime = LocalDateTime.parse("1970-01-01T00:00:00", DateTimeFormatter.ISO_DATE_TIME);
       } else {
         startDateTime = LocalDateTime.parse(startTime, DateTimeFormatter.ISO_DATE_TIME);
       }
