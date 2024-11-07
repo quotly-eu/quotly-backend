@@ -10,6 +10,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
 @Path("/v1/users")
 @Produces(MediaType.APPLICATION_JSON)
@@ -22,7 +23,7 @@ public class UserResource {
     @QueryParam("start") String startTime,
     @QueryParam("end") String endTime,
     @QueryParam("search") @DefaultValue("") String searchQuery,
-    @QueryParam("page") @DefaultValue("0") Integer pageIndex,
+    @QueryParam("page") @DefaultValue("1") Integer pageIndex,
     @QueryParam("limit") @DefaultValue("10") Integer pageSize
   ) {
     return userService.getAllUsers(startTime, endTime, searchQuery, pageIndex, pageSize);
@@ -30,6 +31,8 @@ public class UserResource {
 
   @GET
   @Path("/{discordId}")
+  @APIResponse(responseCode = "200", description = "User found")
+  @APIResponse(responseCode = "404", description = "User not found")
   public Response getUser(@PathParam("discordId") String discordId) {
     return userService.getUserByDiscordId(discordId);
   }
