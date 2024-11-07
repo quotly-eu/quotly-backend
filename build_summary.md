@@ -1,6 +1,5 @@
 # Quotly summary
 
----
 ### Information about the built Docker Image:
 
 | Package Registry   | Docker Image Tag   |
