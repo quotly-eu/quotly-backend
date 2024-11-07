@@ -60,10 +60,10 @@ public class UserService {
     List<UserEntity> users;
     if (searchQuery == null || searchQuery.isBlank()) {
       users = userRepository.filterByCreationTimeOrByDisplayName(
-        startDateTime, endDateTime, "", pageIndex-1, pageSize);
+        startDateTime, endDateTime, "", pageIndex - 1, pageSize);
     } else {
       users = userRepository.filterByCreationTimeOrByDisplayName(
-        startDateTime, endDateTime, searchQuery, pageIndex-1, pageSize);
+        startDateTime, endDateTime, searchQuery, pageIndex - 1, pageSize);
     }
 
     List<UserDto> responseUsers = new ArrayList<>();
