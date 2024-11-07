@@ -1,10 +1,12 @@
 package eu.quotly.entity;
 
 import eu.quotly.Constants;
+import eu.quotly.entity.listener.UserEntityListener;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +29,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "users", schema = "quotly")
 @EqualsAndHashCode(callSuper = true)
+@EntityListeners(UserEntityListener.class)
 public class UserEntity extends PanacheEntityBase {
   @Id
   @Column(name = "user_id", nullable = false, updatable = false)
@@ -38,7 +41,7 @@ public class UserEntity extends PanacheEntityBase {
   private String discordId;
 
   @Column(name = "email_address", length = Constants.DB_LARGE_STRING_LENGTH)
-  private String emailAddress; // TODO: Email Address encryption
+  private String emailAddress;
 
   @Column(name = "display_name", length = Constants.DB_EXTRA_SMALL_STRING_LENGTH)
   private String displayName;

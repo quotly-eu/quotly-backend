@@ -1,6 +1,7 @@
 package eu.quotly.service;
 
 import eu.quotly.config.ErrorCode;
+import eu.quotly.converter.UserEntityConverter;
 import eu.quotly.dto.UserDto;
 import eu.quotly.entity.UserEntity;
 import eu.quotly.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -20,6 +22,7 @@ public class UserService {
 
   @Inject UserRepository userRepository;
   @Inject ResponseService responseService;
+  @Inject UserEntityConverter userEntityConverter;
 
   public Response getAllUsers(
     String startTime,
@@ -28,7 +31,7 @@ public class UserService {
     Integer pageIndex,
     Integer pageSize
   ) {
-    if (pageIndex < 0 || pageSize < 1) {
+    if (pageIndex < 1 || pageSize < 1) {
       return responseService.createErrorResponse(Response.Status.BAD_REQUEST, ErrorCode.INVALID_PAGE_INDEX_OR_SIZE);
     }
 
@@ -57,15 +60,21 @@ public class UserService {
     List<UserEntity> users;
     if (searchQuery == null || searchQuery.isBlank()) {
       users = userRepository.filterByCreationTimeOrByDisplayName(
-        startDateTime, endDateTime, "", pageIndex, pageSize);
+        startDateTime, endDateTime, "", pageIndex - 1, pageSize);
     } else {
       users = userRepository.filterByCreationTimeOrByDisplayName(
-        startDateTime, endDateTime, searchQuery, pageIndex, pageSize);
+        startDateTime, endDateTime, searchQuery, pageIndex - 1, pageSize);
     }
 
+    List<UserDto> responseUsers = new ArrayList<>();
+    users.forEach(userEntity -> {
+      userEntity.setEmailAddress(null);
+      responseUsers.add(userEntityConverter.toUserDto(userEntity));
+    });
+
     LOGGER.info("Found {} users between {} and {} that starts with {}",
-      users.size(), startDateTime, endDateTime, searchQuery);
-    return responseService.createResponse(Response.Status.OK, users);
+      responseUsers.size(), startDateTime, endDateTime, searchQuery);
+    return responseService.createResponse(Response.Status.OK, responseUsers);
   }
 
   public Response getUserByDiscordId(String discordId) {
@@ -73,13 +82,8 @@ public class UserService {
     if (foundUser == null) {
       return responseService.createErrorResponse(Response.Status.NOT_FOUND, ErrorCode.USER_NOT_FOUND);
     }
-
-    return responseService.createResponse(Response.Status.OK, new UserDto(
-      foundUser.getDiscordId(),
-      foundUser.getDisplayName(),
-      foundUser.getEmailAddress(),
-      foundUser.getCreationTime()
-    ));
+    foundUser.setEmailAddress(null);
+    return responseService.createResponse(Response.Status.OK, userEntityConverter.toUserDto(foundUser));
   }
 
   public Response getAllUserReactions(String discordId) {
