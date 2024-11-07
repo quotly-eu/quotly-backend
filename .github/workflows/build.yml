@@ -104,14 +104,17 @@ jobs:
           BUILD_NUMBER=$(echo $GITHUB_RUN_NUMBER)
           DOCKER_IMAGE_TAG="${DATE_TAG}.${BUILD_NUMBER}"
           DOCKER_IMAGE_NAME="ghcr.io/${REPOSITORY_OWNER}/quotly-release"
+          PACKAGE_REGISTRY="quotly-release"
           else
           BUILD_NUMBER=$(echo $GITHUB_RUN_NUMBER)
           DOCKER_IMAGE_TAG="${BRANCH_NAME}.${BUILD_NUMBER}"
           DOCKER_IMAGE_NAME="ghcr.io/${REPOSITORY_OWNER}/quotly-staging"
+          PACKAGE_REGISTRY="quotly-staging"
           fi
           
           echo "DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG" >> $GITHUB_ENV
           echo "DOCKER_IMAGE_NAME=$DOCKER_IMAGE_NAME" >> $GITHUB_ENV
+          echo "PACKAGE_REGISTRY=$PACKAGE_REGISTRY" >> $GITHUB_ENV
 
       - name: Build backend
         run: |
@@ -144,3 +147,9 @@ jobs:
         run: |
           chmod +x cleanup_docker_images.sh
           ./cleanup_docker_images.sh ${{ github.repository_owner }} quotly-staging ${{ secrets.QUOTLY_TOKEN }} 5
+
+      - name: Add Summary
+        run: |
+          sed -i "s/@PACKAGE_REGISTRY@/${{ env.PACKAGE_REGISTRY }}/g" build_summary.md
+          sed -i "s/@DOCKER_IMAGE_TAG@/${{ env.DOCKER_IMAGE_TAG }}/g" build_summary.md
+          cat build_summary.md >> $GITHUB_STEP_SUMMARY
