@@ -6,9 +6,9 @@ Quarkus documentation: <https://quarkus.io/>
 
 ## Branch naming guidelines
 
-> **Feature Branch:** ```feature/<ticket-id>``` Example: ```feature/#123```
+> **Feature Branch:** ```feature/<short ticket description>``` Example: ```feature/rainbow-rest-endpoints```
 > 
-> **Bugfix Branch:** ```bugfix/<ticket-id>``` Example: ```bugfix/#123```
+> **Bugfix Branch:** ```bugfix/<short ticket description>``` Example: ```bugfix/rainbow-rest-endpoints```
 
 ## Commit guidelines
 

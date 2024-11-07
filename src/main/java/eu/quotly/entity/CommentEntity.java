@@ -24,29 +24,37 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "quotes", schema = "quotly")
+@Table(name = "quote_comments", schema = "quotly")
 @EqualsAndHashCode(callSuper = true)
-public class QuoteEntity extends PanacheEntityBase {
+public class CommentEntity extends PanacheEntityBase {
   @Id
-  @Column(name = "quote_id", nullable = false, updatable = false)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quotes_seq")
-  @SequenceGenerator(name = "quotes_seq", sequenceName = "quotes_sequence", allocationSize = 1)
-  private Long quoteId;
+  @Column(name = "comment_id", nullable = false, updatable = false)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quote_comments_seq")
+  @SequenceGenerator(name = "quote_comments_seq", sequenceName = "quote_comments_sequence", allocationSize = 1)
+  private Long commentId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
-  @Column(name = "quote", length = Constants.DB_EXTRA_LARGE_STRING_LENGTH)
-  private String quote;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "quote_id", nullable = false)
+  private QuoteEntity quote;
 
-  @OneToMany(mappedBy = "quote", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-  private List<ReactionEntity> reactions;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent", referencedColumnName = "comment_id")
+  private CommentEntity parentComment;
+
+  @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<CommentEntity> childComments;
+
+  @Column(name = "comment", length = Constants.DB_EXTRA_LARGE_STRING_LENGTH)
+  private String comment;
 
   @Column(name = "created_at", updatable = false)
   private LocalDateTime creationTime = LocalDateTime.now();
 
-  @Column(name = "changed_at")
+  @Column(name = "updated_at")
   private LocalDateTime modificationTime;
 
   @Column(name = "deleted_at")
@@ -54,11 +62,13 @@ public class QuoteEntity extends PanacheEntityBase {
 
   @Override
   public String toString() {
-    return "QuoteEntity {"
-      + "quoteId=" + quoteId
+    return "CommentEntity {"
+      + "commentId=" + commentId
       + ", userId=" + user.getUserId()
-      + ", quote=" + quote
-      + ", reactionCount=" + (reactions != null ? reactions.size() : 0)
+      + ", quoteId=" + quote.getQuoteId()
+      + ", parentCommentId=" + parentComment.getCommentId()
+      + ", childCount=" + (childComments != null ? childComments.size() : 0)
+      + ", comment=" + comment
       + ", creationTime=" + creationTime
       + ", modificationTime=" + modificationTime
       + ", deletionTime=" + deletionTime
